@@ -1,7 +1,10 @@
 # app/main.py
+import logging
 
 from fastapi import FastAPI
 from app.api import routers
+from app.core import logger
+
 
 # Initialize the FastAPI application
 app = FastAPI(title="Kubernetes Query Agent")
@@ -12,12 +15,13 @@ app.include_router(routers.router)
 # Startup and shutdown events
 @app.on_event("startup")
 async def startup_event():
-    pass
+    logger.setup_logging()
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    pass
+    logger.shutdown_logging()
     
 @app.get("/")
 async def root():
+    logging.info(msg="In base route")
     return {"message": "Welcome to the Kubernetes Query Agent API"}

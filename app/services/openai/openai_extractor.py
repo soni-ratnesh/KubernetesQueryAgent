@@ -1,5 +1,5 @@
 from .schema import KubernetesQuery
-
+import logging
 import openai
 
 class OpenAIClient(object):
@@ -56,7 +56,7 @@ class OpenAIClient(object):
             }
         }
 
-        Output only the JSON response with no additional text.
+        Output only the JSON response with no additional text. And evertything should be lowercased.
 
         """
 
@@ -73,4 +73,5 @@ class OpenAIClient(object):
                                                     response_format=KubernetesQuery 
                                                 )
         content = response.choices[0].message.parsed
+        logging.info(content)
         return content

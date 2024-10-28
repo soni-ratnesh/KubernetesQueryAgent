@@ -7,11 +7,9 @@ def handle_query(query: str, openai_client: OpenAIClient = OpenAIClient())->str:
     query_details = openai_client.extract(query)
 
     # query kube client
-    print(query_details)
     if query_details.resource_category=="workload":
         
         if query_details.resource_type=="deployment":
-            print(query_details.namespace)
             deployment_resource = deployment.DeploymentResource(namespace=query_details.namespace)
 
             # Route based on the action specified in the query
@@ -29,8 +27,13 @@ def handle_query(query: str, openai_client: OpenAIClient = OpenAIClient())->str:
             
             elif query_details.action == "list":
                 # Use `status` in filters to list active, terminated, or all deployments
-                status_filter = query_details.filters.status if query_details.filters else "all"
+                status_filter = query_details.filters.status if len(query_details.filters.status) else "all"
                 return deployment_resource.list_deployments(status_filter=status_filter)
+            
+            else:
+                return "Unsupported action or missing required parameters."
+
+
 
     response = "Dummy"
 

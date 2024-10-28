@@ -5,7 +5,7 @@ from typing import Optional, Dict
 
 class DeploymentResource(KubernetesBase):
     def __init__(self, namespace: Optional[str] = "default", labels: Optional[Dict[str, str]] = None):
-        super().__init__(namespace)
+        super().__init__(namespace, labels)
         self.api = client.AppsV1Api()  
 
     def get_count(self) -> str:
@@ -19,7 +19,7 @@ class DeploymentResource(KubernetesBase):
     def get_status(self, deployment_name: str) -> str:
         try:
             deployment = self.api.read_namespaced_deployment(name=deployment_name, namespace=self.namespace)
-            simple_name = "-".join(deployment_name.split("-")[:-2])
+            simple_name = deployment_name
             conditions = deployment.status.conditions
             if conditions:
                 return f"{simple_name} is {conditions[-1].type}: {conditions[-1].status}"
@@ -32,7 +32,7 @@ class DeploymentResource(KubernetesBase):
     def get_creation_time(self, deployment_name: str) -> str:
         try:
             deployment = self.api.read_namespaced_deployment(name=deployment_name, namespace=self.namespace)
-            simple_name = "-".join(deployment_name.split("-")[:-2])
+            simple_name = deployment_name
             creation_time = deployment.metadata.creation_timestamp
             return f"{simple_name} was created on {creation_time}"
         except client.ApiException as e:
@@ -57,7 +57,6 @@ class DeploymentResource(KubernetesBase):
                 return "No deployments found."
 
             filtered_deployments = []
-            print(deployment.spec.selector.match_labels.items)
 
             for deployment in deployments.items:
                 available_replicas = deployment.status.available_replicas or 0
@@ -69,7 +68,7 @@ class DeploymentResource(KubernetesBase):
                 elif status_filter == "terminated" and available_replicas > 0:
                     continue
 
-                simple_name = "-".join(deployment.metadata.name.split("-")[:-2])
+                simple_name = deployment.metadata.name
                 filtered_deployments.append(f"{simple_name} (Replicas: {available_replicas}/{total_replicas})")
 
             if not filtered_deployments:

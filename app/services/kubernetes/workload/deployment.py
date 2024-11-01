@@ -78,3 +78,28 @@ class DeploymentResource(KubernetesBase):
         except client.ApiException as e:
             self.log_error(f"Kubernetes API exception: {e}")
             return "Error listing deployments"
+
+def deployment_handler(query):
+    deployment_resource = DeploymentResource(namespace=query.namespace, labels=query.filters.labels)
+
+    # Route based on the action specified in the query
+    if query.action == "count":
+        return deployment_resource.get_count()
+    
+    elif query.action == "status" and query.specific_name:
+        return deployment_resource.get_status(query.specific_name)
+    
+    elif query.action == "creation_time" and query.specific_name:
+        return deployment_resource.get_creation_time(query.specific_name)
+    
+    elif query.action == "exists":
+        return deployment_resource.exists()
+    
+    elif query.action == "list":
+        # Use `status` in filters to list active, terminated, or all deployments
+        status_filter = query.filters.status if len(query.filters.status) else "all"
+        return deployment_resource.list_deployments(status_filter=status_filter)
+    
+    else:
+        return "Unsupported action or missing required parameters."
+        

@@ -69,3 +69,26 @@ class PodResource(KubernetesBase):
         except client.ApiException as e:
             self.log_error(f"Kubernetes API exception: {e}")
             return "Error listing pods"
+
+
+def pod_handler(query):
+    pod_resource = PodResource(namespace=query.namespace, labels=query.filters.labels)
+            
+    # Route based on action specified in the query
+    if query.action == "count":
+        return pod_resource.get_count()
+    
+    elif query.action == "status" and query.specific_name:
+        return pod_resource.get_status(query.specific_name)
+    
+    elif query.action == "creation_time" and query.specific_name:
+        return pod_resource.get_creation_time(query.specific_name)
+    
+    elif query.action == "details" and query.specific_name:
+        return pod_resource.get_logs(query.specific_name)
+    
+    elif query.action == "list":
+        status_filter = query.filters.status if len(query.filters.status) else "all"
+        return pod_resource.list_pods(status_filter=status_filter)
+    
+    return "Unsupported action or missing required parameters for pod." 

@@ -1,6 +1,8 @@
 from .deployment import deployment_handler
 from .pod import pod_handler 
 from .cronjob import cronjob_handler
+from .daemonset import daemonset_handler
+
 
 
 
@@ -12,6 +14,8 @@ def workload_handler(query):
            return pod_handler(query)
     elif query.resource_type == "cronjob":
            return cronjob_handler(query)
+    elif query.resource_type == "daemonset":
+           return daemonset_handler(query)
     else:
            return "Unknown Resource Type"
 

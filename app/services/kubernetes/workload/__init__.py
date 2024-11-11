@@ -3,6 +3,7 @@ from .pod import pod_handler
 from .cronjob import cronjob_handler
 from .daemonset import daemonset_handler
 from .job import job_handler
+from .replicaset import replicaset_handler
 
 
 
@@ -19,6 +20,8 @@ def workload_handler(query):
            return daemonset_handler(query)
     elif query.resource_type == "job":
            return job_handler(query)
+    elif query.resource_type == "replicaset":
+           return replicaset_handler(query)
     else:
            return "Unknown Resource Type"
 

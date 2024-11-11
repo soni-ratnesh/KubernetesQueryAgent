@@ -4,10 +4,7 @@ from .cronjob import cronjob_handler
 from .daemonset import daemonset_handler
 from .job import job_handler
 from .replicaset import replicaset_handler
-
-
-
-
+from .statefulset import statefulset_handler
 
 def workload_handler(query):
     if query.resource_type=="deployment":
@@ -22,8 +19,8 @@ def workload_handler(query):
            return job_handler(query)
     elif query.resource_type == "replicaset":
            return replicaset_handler(query)
+    elif query.resource_type == "statefulset":
+           return statefulset_handler(query)
     else:
            return "Unknown Resource Type"
-
-
     

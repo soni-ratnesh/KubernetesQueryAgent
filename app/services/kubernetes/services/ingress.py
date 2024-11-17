@@ -147,8 +147,8 @@ class IngressResource(KubernetesBase):
 
 def ingress_handler(query):
     # Check if the query is for ingress resources
-    if query.resource_type == "ingress":
-        ingress_resource = IngressResource(namespace=query.namespace)
+  
+    ingress_resource = IngressResource(namespace=query.namespace)
 
     # Route based on the action specified in the query
     if query.action == "list":

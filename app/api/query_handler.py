@@ -1,5 +1,6 @@
 from app.services.openai import OpenAIClient
 from app.services.kubernetes.workload import workload_handler
+from app.services.kubernetes.services import service_handler
 
 def handle_query(query: str, openai_client: OpenAIClient = OpenAIClient())->str:
 
@@ -10,7 +11,7 @@ def handle_query(query: str, openai_client: OpenAIClient = OpenAIClient())->str:
     if query_details.resource_category=="workload":
         return workload_handler(query_details)
     elif query_details.resource_category =="services":
-        pass
+        return service_handler(query_details)
 
     response = "Dummy"
 

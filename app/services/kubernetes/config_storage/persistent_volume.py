@@ -24,6 +24,7 @@
 from typing import Optional, Dict, List
 from kubernetes import client
 from ..kubernetes_client import KubernetesBase
+import re
 
 class PersistentVolumeClaimResource(KubernetesBase):
     def __init__(self, namespace: Optional[str] = "default", labels: Optional[Dict[str, str]] = None):
@@ -189,8 +190,6 @@ class PersistentVolumeClaimResource(KubernetesBase):
     def get_pvcs_larger_than(self, size: str) -> str:
         """Find all PVCs larger than a specified size (e.g., '10Gi')."""
         try:
-            from kubernetes.client import models
-            import re
 
             def parse_size(size_str):
                 match = re.match(r'(\d+)([KMGTP]i?)?', size_str)

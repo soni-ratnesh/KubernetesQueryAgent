@@ -1,6 +1,7 @@
 from .config_maps import config_maps_hamdler
 from .persistent_volume import pv_handler
 from .secrets import secrets_handler
+from .storage_class import storage_class_handler
 
 
 def service_handler(query):
@@ -11,6 +12,8 @@ def service_handler(query):
         return pv_handler(query)
     elif query.resource_type == "secrets":
         return secrets_handler(query)
-    
+    elif query.resource_type == "storage_class":
+        return storage_class_handler(query)
     else:
         return "Unknown Resource Type"
+    

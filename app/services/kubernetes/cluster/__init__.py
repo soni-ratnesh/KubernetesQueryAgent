@@ -1,5 +1,6 @@
 from .cluster_role_bindings import crb_handler
 from .cluster_roles import cr_handler
+from .event import event_handler
 
 
 
@@ -10,7 +11,8 @@ def cluster_handler(query):
     elif query.resource_type == "cluster_role":
         return cr_handler(query)
     
-
+    elif query.resource_type == "event":
+        return event_handler(query)
     
 
 

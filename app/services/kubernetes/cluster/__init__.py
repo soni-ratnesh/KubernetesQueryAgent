@@ -3,6 +3,7 @@ from .cluster_roles import cr_handler
 from .event import event_handler
 from .namespace import namespace_handler
 from .network_policy import np_handler
+from .nodes import nodes_handler
 
 
 
@@ -22,7 +23,8 @@ def cluster_handler(query):
     elif query.resource_type == "network_policy":
         return np_handler(query)
     
-
+    elif query.resource_type == "node":
+        return nodes_handler(query)
     
 
     

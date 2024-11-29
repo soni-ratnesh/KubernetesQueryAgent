@@ -4,6 +4,7 @@ from .event import event_handler
 from .namespace import namespace_handler
 from .network_policy import np_handler
 from .nodes import nodes_handler
+from .persistent_volume import pv_handler
 
 
 
@@ -26,7 +27,8 @@ def cluster_handler(query):
     elif query.resource_type == "node":
         return nodes_handler(query)
     
-
+    elif query.resource_type == "persistent_volume" :
+        return pv_handler(query)
     
 
     

@@ -6,7 +6,7 @@ from .network_policy import np_handler
 from .nodes import nodes_handler
 from .persistent_volume import pv_handler
 from .role_bindings import rb_handler
-
+from .roles import roles_handler
 
 
 def cluster_handler(query):
@@ -33,7 +33,9 @@ def cluster_handler(query):
     
     elif query.resource_type == "role_binding" :
         return rb_handler(query)
-
+    
+    elif query.resource_type == "role":
+        return roles_handler(query)
     
 
     
